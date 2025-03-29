@@ -1,18 +1,17 @@
-let projectile, target;
-const dt = 0.1;
-const g = 9.81;
-const k = 0.05;
+import { Projectile } from "/js/projectile.js";
 
-function setup() {
+let projectile, target;
+
+window.setup = () => {
   createCanvas(1500, 800);
-  let angle = radians(30);
-  let speed = 175;
-  let initialVelocity = createVector(speed * cos(angle), speed * sin(angle));
+  const angle = radians(5);
+  const speed = 1000;
+  const initialVelocity = createVector(speed * cos(angle), speed * sin(angle));
   projectile = new Projectile(0, 0, initialVelocity, 5);
   target = new Target(width * 0.9, 100, 250);
-}
+};
 
-function draw() {
+window.draw = () => {
   background(220);
   translate(0, height);
   scale(1, -1);
@@ -45,7 +44,7 @@ function draw() {
   ) {
     noLoop();
   }
-}
+};
 
 class Target {
   constructor(x, y, height) {
@@ -74,31 +73,6 @@ class Target {
     const c = this.pos.lower;
     const d = this.pos.upper;
     return intersects2D(a, b, c, d);
-  }
-}
-
-class Projectile {
-  constructor(x, y, velocity, size) {
-    this.pos = createVector(x, y);
-    this.vel = velocity.copy();
-    this.prev = undefined;
-    this.size = size;
-  }
-
-  update() {
-    this.prev = this.pos.copy();
-    const gravity = createVector(0, -g);
-    const drag = this.vel.copy().mult(-k);
-
-    const acceleration = p5.Vector.add(gravity, drag);
-
-    // Euler integration:
-    this.vel.add(p5.Vector.mult(acceleration, dt));
-    this.pos.add(p5.Vector.mult(this.vel, dt));
-  }
-
-  display() {
-    circle(this.pos.x, this.pos.y, this.size);
   }
 }
 
