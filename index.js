@@ -4,11 +4,11 @@ let projectile, target;
 
 window.setup = () => {
   createCanvas(1500, 800);
-  const angle = radians(5);
-  const speed = 1000;
+  const angle = radians(20);
+  const speed = 500;
   const initialVelocity = createVector(speed * cos(angle), speed * sin(angle));
-  projectile = new Projectile(0, 0, initialVelocity, 5);
-  target = new Target(width * 0.9, 100, 250);
+  projectile = new Projectile(0, 100, initialVelocity, 5);
+  target = new Target(width * 0.9, 500, 100);
 };
 
 window.draw = () => {
@@ -16,10 +16,9 @@ window.draw = () => {
   translate(0, height);
   scale(1, -1);
 
-  target.display();
-
   projectile.update();
   projectile.display();
+  target.display();
 
   if (projectile.pos.x >= target.pos.lower.x) {
     const impact = target.impactedBy(projectile);
@@ -36,14 +35,13 @@ window.draw = () => {
     }
   }
 
-  if (
+  const outOfFrame =
     projectile.pos.x < 0 ||
     projectile.pos.x > width ||
     projectile.pos.y < 0 ||
-    projectile.pos.y > height
-  ) {
-    noLoop();
-  }
+    projectile.pos.y > height;
+
+  if (outOfFrame) noLoop();
 };
 
 class Target {

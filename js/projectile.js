@@ -6,15 +6,16 @@ export class Projectile {
     this.vel = velocity.copy();
     this.prev = undefined;
     this.size = size;
-    console.log("projectile initialized");
+    this.prevPoints = [];
   }
 
   update() {
     this.prev = this.pos.copy();
+    this.prevPoints.push(this.pos.copy());
+
     const { dt, g, k } = constants;
     const gravity = createVector(0, -g);
     const drag = this.vel.copy().mult(-k);
-
     const acceleration = p5.Vector.add(gravity, drag);
 
     // Euler integration:
@@ -24,5 +25,12 @@ export class Projectile {
 
   display() {
     circle(this.pos.x, this.pos.y, this.size);
+    push();
+    stroke("green");
+    strokeWeight(3);
+    for (const p of this.prevPoints) {
+      point(p.x, p.y);
+    }
+    pop();
   }
 }
