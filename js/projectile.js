@@ -1,3 +1,5 @@
+import constants from "/js/constants.js";
+
 export class Projectile {
   constructor(x, y, velocity, size) {
     this.pos = createVector(x, y);
@@ -9,6 +11,7 @@ export class Projectile {
 
   update() {
     this.prev = this.pos.copy();
+    const { dt, g, k } = constants;
     const gravity = createVector(0, -g);
     const drag = this.vel.copy().mult(-k);
 
