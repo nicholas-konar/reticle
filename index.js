@@ -1,25 +1,31 @@
 import { Projectile } from "/js/projectile.js";
 import { Target } from "/js/target.js";
 
-let projectile, target;
+let projectile, target, cam;
 
 window.setup = () => {
-  createCanvas(1500, 800);
-  const angle = radians(20);
-  const speed = 500;
+  createCanvas(1500, 800, WEBGL);
+  debugMode();
+
+  cam = createCamera();
+  cam.setPosition(0, -500, 1500);
+  setCamera(cam);
+
+  const angle = radians(12);
+  const speed = 200;
   const initialVelocity = createVector(speed * cos(angle), speed * sin(angle));
-  projectile = new Projectile(0, 100, initialVelocity, 5);
-  target = new Target(width * 0.9, 500, 100);
+  projectile = new Projectile(0, 0, initialVelocity, 5);
+  target = new Target(1000, 50, 100);
 };
 
 window.draw = () => {
   background(220);
-  translate(0, height);
-  scale(1, -1);
 
   projectile.update();
   projectile.display();
   target.display();
+
+  cam.lookAt(projectile.pos.x, projectile.pos.y, 100);
 
   if (projectile.pos.x >= target.pos.lower.x) {
     const impact = target.impactedBy(projectile);
@@ -28,7 +34,7 @@ window.draw = () => {
       push();
       stroke("red");
       strokeWeight(5);
-      point(impact.x, impact.y);
+      point(impact.x, -impact.y, 0);
       pop();
       noLoop();
     } else {
