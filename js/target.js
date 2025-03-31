@@ -12,9 +12,9 @@ export class Target {
     strokeWeight(1);
     line(
       this.pos.lower.x,
-      this.pos.lower.y,
+      -this.pos.lower.y,
       this.pos.upper.x,
-      this.pos.upper.y,
+      -this.pos.upper.y,
     );
     pop();
   }

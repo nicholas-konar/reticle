@@ -24,12 +24,16 @@ export class Projectile {
   }
 
   display() {
-    circle(this.pos.x, this.pos.y, this.size);
+    circle(this.pos.x, -this.pos.y, this.size);
+    push();
+    stroke("yellow");
+    strokeWeight(5);
+    pop();
     push();
     stroke("green");
     strokeWeight(3);
     for (const p of this.prevPoints) {
-      point(p.x, p.y);
+      point(p.x, -p.y);
     }
     pop();
   }
