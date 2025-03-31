@@ -4,13 +4,11 @@ export class Projectile {
   constructor(x, y, velocity, size) {
     this.pos = createVector(x, y);
     this.vel = velocity.copy();
-    this.prev = undefined;
     this.size = size;
     this.prevPoints = [];
   }
 
   update() {
-    this.prev = this.pos.copy();
     this.prevPoints.push(this.pos.copy());
 
     const { dt, g, k } = constants;

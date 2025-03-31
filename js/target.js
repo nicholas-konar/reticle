@@ -44,7 +44,7 @@ export class Target {
 
   impactedBy(projectile) {
     const a = projectile.pos;
-    const b = projectile.prev;
+    const b = projectile.prevPoints.at(-1);
     const c = this.pos.lower;
     const d = this.pos.upper;
     return this.#intersects2D(a, b, c, d);

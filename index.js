@@ -8,7 +8,7 @@ window.setup = () => {
   debugMode();
 
   cam = createCamera();
-  cam.setPosition(0, -500, 1500);
+  cam.setPosition(0, -100, 500);
   setCamera(cam);
 
   const angle = radians(12);
