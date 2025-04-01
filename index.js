@@ -4,18 +4,18 @@ import { Target } from "/js/target.js";
 let projectile, target, cam;
 
 window.setup = () => {
-  createCanvas(1500, 800, WEBGL);
+  createCanvas(1000, 800, WEBGL);
   debugMode();
 
   cam = createCamera();
-  cam.setPosition(0, -100, 500);
+  cam.setPosition(100, -50, 500);
   setCamera(cam);
 
-  const angle = radians(12);
-  const speed = 200;
+  const angle = radians(20);
+  const speed = 1000;
   const initialVelocity = createVector(speed * cos(angle), speed * sin(angle));
   projectile = new Projectile(0, 0, initialVelocity, 5);
-  target = new Target(1000, 50, 100);
+  target = new Target(300, 0, 50, 100);
 };
 
 window.draw = () => {
@@ -25,9 +25,9 @@ window.draw = () => {
   projectile.display();
   target.display();
 
-  cam.lookAt(projectile.pos.x, projectile.pos.y, 100);
+  cam.lookAt(projectile.pos.x, -projectile.pos.y - 50, 100);
 
-  if (projectile.pos.x >= target.pos.lower.x) {
+  if (projectile.pos.x >= target.x) {
     const impact = target.impactedBy(projectile);
     if (impact) {
       console.log(`Impact x: ${impact.x} y: ${impact.y}`);
@@ -48,6 +48,6 @@ window.draw = () => {
     projectile.pos.y < 0 ||
     projectile.pos.y > height;
 
-  if (outOfFrame) noLoop();
+  if (outOfFrame)
+    noLoop(), console.log("Projectile out of frame", projectile.pos);
 };
-

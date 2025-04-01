@@ -1,21 +1,18 @@
 export class Target {
-  constructor(x, y, height) {
-    this.pos = {
-      upper: createVector(x, y + height),
-      lower: createVector(x, y),
-    };
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
   }
 
   display() {
     push();
     stroke("grey");
     strokeWeight(1);
-    line(
-      this.pos.lower.x,
-      -this.pos.lower.y,
-      this.pos.upper.x,
-      -this.pos.upper.y,
-    );
+    translate(this.x, -(this.y + this.h / 2), 0);
+    rotateY(PI / 2);
+    box(this.w, this.h, 5);
     pop();
   }
 
@@ -45,8 +42,8 @@ export class Target {
   impactedBy(projectile) {
     const a = projectile.pos;
     const b = projectile.prevPoints.at(-1);
-    const c = this.pos.lower;
-    const d = this.pos.upper;
+    const c = createVector(this.x, this.y + this.h);
+    const d = createVector(this.x, this.y);
     return this.#intersects2D(a, b, c, d);
   }
 }
