@@ -1,8 +1,8 @@
 import constants from "/js/constants.js";
 
 export class Projectile {
-  constructor(x, y, velocity, size) {
-    this.pos = createVector(x, y);
+  constructor(pos, velocity, size) {
+    this.pos = pos;
     this.vel = velocity.copy();
     this.size = size;
     this.prevPoints = [];
@@ -12,7 +12,7 @@ export class Projectile {
     this.prevPoints.push(this.pos.copy());
 
     const { dt, g, k } = constants;
-    const gravity = createVector(0, -g);
+    const gravity = createVector(0, -g, 0);
     const drag = this.vel.copy().mult(-k);
     const acceleration = p5.Vector.add(gravity, drag);
 
@@ -22,17 +22,17 @@ export class Projectile {
   }
 
   display() {
-    circle(this.pos.x, -this.pos.y, this.size);
     push();
     stroke("yellow");
-    strokeWeight(5);
+    translate(this.pos.x, -this.pos.y, this.pos.z);
+    sphere(1);
     pop();
-    push();
-    stroke("green");
-    strokeWeight(3);
     for (const p of this.prevPoints) {
-      point(p.x, -p.y);
+      push();
+      stroke("green");
+      translate(p.x, -p.y, p.z);
+      sphere(0.5);
+      pop();
     }
-    pop();
   }
 }

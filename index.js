@@ -8,13 +8,19 @@ window.setup = () => {
   debugMode();
 
   cam = createCamera();
-  cam.setPosition(100, -50, 500);
+  cam.setPosition(100, -50, 250);
   setCamera(cam);
 
   const angle = radians(20);
-  const speed = 1000;
-  const initialVelocity = createVector(speed * cos(angle), speed * sin(angle));
-  projectile = new Projectile(0, 0, initialVelocity, 5);
+  const windage = radians(4);
+  const speed = 100;
+  const initialPos = createVector(0, 0, 0);
+  const initialVelocity = createVector(
+    speed * cos(angle),
+    speed * sin(angle),
+    speed * sin(windage),
+  );
+  projectile = new Projectile(initialPos, initialVelocity, 5);
   target = new Target(300, 0, 50, 100);
 };
 
