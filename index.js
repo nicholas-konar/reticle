@@ -8,11 +8,11 @@ window.setup = () => {
   debugMode();
 
   cam = createCamera();
-  cam.setPosition(100, -50, 250);
+  cam.setPosition(150, -50, 250);
   setCamera(cam);
 
-  const angle = radians(32);
-  const windage = radians(2);
+  const angle = radians(13);
+  const windage = radians(-2);
   const speed = 100;
   const initialProjectilePos = createVector(0, 0, 0);
   const initialVelocity = createVector(
@@ -22,8 +22,14 @@ window.setup = () => {
   );
   projectile = new Projectile(initialProjectilePos, initialVelocity, 5);
 
-  const initialTargetPos = createVector(250, 0, 0);
+  const initialTargetPos = createVector(350, 0, 0);
   target = new Target(initialTargetPos, 50, 100, 2);
+
+  cam.lookAt(
+    initialTargetPos.x / 2,
+    -initialTargetPos.y - 50,
+    initialTargetPos.z,
+  );
 };
 
 window.draw = () => {
@@ -33,18 +39,19 @@ window.draw = () => {
   projectile.update();
   projectile.display();
 
-  cam.lookAt(projectile.pos.x, -projectile.pos.y - 50, 100);
+  //cam.lookAt(projectile.pos.x, -projectile.pos.y - 50, 0);
 
   if (projectile.pos.x >= target.pos.x) {
     const px = projectile.at(target.pos.x);
-    const impact = target.impactedBy(px);
-    if (impact) {
-      push();
-      stroke("red");
-      strokeWeight(5);
-      point(impact.x, -impact.y, 0);
-      pop();
-    }
+    const { impact, delta } = target.impactedBy(px);
+    console.log({ impact, delta });
+
+    if (impact) target.displayImpact(px);
+
+    const report = generateReport(impact, delta);
+    console.log(report);
+
+    projectile.displayTrail();
     noLoop();
   }
 
@@ -54,6 +61,30 @@ window.draw = () => {
     projectile.pos.y < 0 ||
     projectile.pos.y > height;
 
-  if (outOfFrame)
-    noLoop(), console.log("Projectile out of frame", projectile.pos);
+  if (outOfFrame) {
+    projectile.displayTrail();
+    console.log("Projectile out of frame", projectile.pos);
+    noLoop();
+  }
 };
+
+function generateReport(impact, delta) {
+  let report = [impact ? "Impact." : "Missed."];
+
+  if (delta.y > 0) {
+    report.push(`${abs(delta.y)} units high`);
+  } else if (delta.y < 0) {
+    report.push(`${abs(delta.y)} units low`);
+  }
+
+  if (delta.z > 0) {
+    report.push(`${abs(delta.z)} units right`);
+  } else if (delta.z < 0) {
+    report.push(`${abs(delta.z)} units left`);
+  }
+
+  if (report.length > 1) report.splice(2, 0, "and");
+  report.push("from center mass.");
+
+  return report.join(" ");
+}
