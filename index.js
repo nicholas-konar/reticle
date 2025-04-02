@@ -1,35 +1,21 @@
 import { Projectile } from "/js/projectile.js";
 import { Target } from "/js/target.js";
 
-let projectile, target, cam;
+let projectile, target, cam, ground;
 
 window.setup = () => {
   createCanvas(1000, 800, WEBGL);
   debugMode();
+  const shooterPosition = createVector(0, 0, 0);
+  const cameraPosition = createVector(150, 50, 250);
+  const targetPosition = createVector(250, 0, 0);
 
-  cam = createCamera();
-  cam.setPosition(150, -50, 250);
-  setCamera(cam);
+  setupCamera(cameraPosition);
+  setupTarget(targetPosition);
+  setupProjectile(shooterPosition);
 
-  const angle = radians(13);
-  const windage = radians(-2);
-  const speed = 100;
-  const initialProjectilePos = createVector(0, 0, 0);
-  const initialVelocity = createVector(
-    speed * cos(angle),
-    speed * sin(angle),
-    speed * sin(windage),
-  );
-  projectile = new Projectile(initialProjectilePos, initialVelocity, 5);
-
-  const initialTargetPos = createVector(350, 0, 0);
-  target = new Target(initialTargetPos, 50, 100, 2);
-
-  cam.lookAt(
-    initialTargetPos.x / 2,
-    -initialTargetPos.y - 50,
-    initialTargetPos.z,
-  );
+  cam.lookAt(target.pos.x, -target.pos.y, target.pos.z);
+  ground = min(shooterPosition.y, target.borders.bottomY);
 };
 
 window.draw = () => {
@@ -39,28 +25,24 @@ window.draw = () => {
   projectile.update();
   projectile.display();
 
-  //cam.lookAt(projectile.pos.x, -projectile.pos.y - 50, 0);
-
   if (projectile.pos.x >= target.pos.x) {
     const px = projectile.at(target.pos.x);
     const { impact, delta } = target.impactedBy(px);
     console.log({ impact, delta });
 
-    if (impact) target.displayImpact(px);
+    if (impact) target.displayImpact(px), noLoop();
 
     const report = generateReport(impact, delta);
     console.log(report);
 
     projectile.displayTrail();
-    noLoop();
   }
 
+  const distBehindTarget = 100;
   const outOfFrame =
     projectile.pos.x < 0 ||
-    projectile.pos.x > width ||
-    projectile.pos.y < 0 ||
-    projectile.pos.y > height;
-
+    projectile.pos.x > target.pos.x + distBehindTarget ||
+    projectile.pos.y < ground;
   if (outOfFrame) {
     projectile.displayTrail();
     console.log("Projectile out of frame", projectile.pos);
@@ -68,18 +50,40 @@ window.draw = () => {
   }
 };
 
+function setupCamera(pos) {
+  cam = createCamera();
+  cam.setPosition(pos.x, -pos.y, pos.z);
+  setCamera(cam);
+}
+
+function setupTarget(pos) {
+  target = new Target(pos, 50, 100, 2);
+}
+
+function setupProjectile(pos) {
+  const angle = radians(5);
+  const windage = radians(-2);
+  const speed = 100;
+  const initialVelocity = createVector(
+    speed * cos(angle),
+    speed * sin(angle),
+    speed * sin(windage),
+  );
+  projectile = new Projectile(pos, initialVelocity, 5);
+}
+
 function generateReport(impact, delta) {
   let report = [impact ? "Impact." : "Missed."];
 
-  if (delta.y > 0) {
+  if (delta.y > target.pos.y) {
     report.push(`${abs(delta.y)} units high`);
-  } else if (delta.y < 0) {
+  } else if (delta.y < target.pos.y) {
     report.push(`${abs(delta.y)} units low`);
   }
 
-  if (delta.z > 0) {
+  if (delta.z > target.pos.z) {
     report.push(`${abs(delta.z)} units right`);
-  } else if (delta.z < 0) {
+  } else if (delta.z < target.pos.z) {
     report.push(`${abs(delta.z)} units left`);
   }
 
