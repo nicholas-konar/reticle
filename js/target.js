@@ -38,7 +38,7 @@ export class Target {
     const checkZ = p.z <= rightZ && leftZ <= p.z;
 
     const impact = checkX && checkY && checkZ;
-    const delta = p5.Vector.sub(this.pos, p);
+    const delta = p5.Vector.sub(p, this.pos);
 
     return { impact, delta };
   }
