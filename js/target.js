@@ -1,49 +1,44 @@
 export class Target {
-  constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+  constructor(pos, w, h, l) {
+    this.pos = pos;
+    this.dim = { w, h, l };
+    this.borders = {
+      topY: pos.y + h,
+      bottomY: pos.y,
+      leftZ: -(w / 2),
+      rightZ: w / 2,
+    };
   }
 
+  // pos represents the middle of the bottom edge of the target face.
+  // p5.js puts the center of the shape at the origin, so we
+  // translate & rotate to treat the center of the bottom edge as pos
   display() {
     push();
-    stroke("grey");
+    stroke("black");
     strokeWeight(1);
-    translate(this.x, -(this.y + this.h / 2), 0);
+    translate(
+      this.pos.x + this.dim.l / 2,
+      -(this.pos.y + this.dim.h / 2),
+      this.pos.z,
+    );
     rotateY(PI / 2);
-    box(this.w, this.h, 5);
+    box(this.dim.w, this.dim.h, this.dim.l);
     pop();
   }
 
-  #intersects2D(a, b, c, d) {
-    const denominator = (b.x - a.x) * (d.y - c.y) - (b.y - a.y) * (d.x - c.x);
-
-    if (denominator === 0) return false;
-
-    const numeratorT = (c.x - a.x) * (d.y - c.y) - (c.y - a.y) * (d.x - c.x);
-    const numeratorU = (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
-
-    const t = numeratorT / denominator;
-    const u = numeratorU / denominator;
-
-    const validT = 0 <= t && t <= 1;
-    const validU = 0 <= u && u <= 1;
-
-    if (validT && validU) {
-      const x = a.x + t * (b.x - a.x);
-      const y = a.y + t * (b.y - a.y);
-      return createVector(x, y);
+  impactedBy(p) {
+    const { topY, bottomY, leftZ, rightZ } = this.borders;
+    const { x, y, z } = p;
+    const checkX = x === x;
+    const checkY = p.y <= topY && bottomY <= p.y;
+    const checkZ = p.z <= rightZ && leftZ <= p.y;
+    if (checkX && checkY && checkZ) {
+      console.log("impact", p);
+      return true;
     } else {
+      console.log("missed", { checkX, checkY, checkZ, topY }, p);
       return false;
     }
-  }
-
-  impactedBy(projectile) {
-    const a = projectile.pos;
-    const b = projectile.prevPoints.at(-1);
-    const c = createVector(this.x, this.y + this.h);
-    const d = createVector(this.x, this.y);
-    return this.#intersects2D(a, b, c, d);
   }
 }

@@ -11,41 +11,41 @@ window.setup = () => {
   cam.setPosition(100, -50, 250);
   setCamera(cam);
 
-  const angle = radians(20);
-  const windage = radians(4);
+  const angle = radians(32);
+  const windage = radians(2);
   const speed = 100;
-  const initialPos = createVector(0, 0, 0);
+  const initialProjectilePos = createVector(0, 0, 0);
   const initialVelocity = createVector(
     speed * cos(angle),
     speed * sin(angle),
     speed * sin(windage),
   );
-  projectile = new Projectile(initialPos, initialVelocity, 5);
-  target = new Target(300, 0, 50, 100);
+  projectile = new Projectile(initialProjectilePos, initialVelocity, 5);
+
+  const initialTargetPos = createVector(250, 0, 0);
+  target = new Target(initialTargetPos, 50, 100, 2);
 };
 
 window.draw = () => {
   background(220);
 
+  target.display();
   projectile.update();
   projectile.display();
-  target.display();
 
   cam.lookAt(projectile.pos.x, -projectile.pos.y - 50, 100);
 
-  if (projectile.pos.x >= target.x) {
-    const impact = target.impactedBy(projectile);
+  if (projectile.pos.x >= target.pos.x) {
+    const px = projectile.at(target.pos.x);
+    const impact = target.impactedBy(px);
     if (impact) {
-      console.log(`Impact x: ${impact.x} y: ${impact.y}`);
       push();
       stroke("red");
       strokeWeight(5);
       point(impact.x, -impact.y, 0);
       pop();
-      noLoop();
-    } else {
-      console.log("Target missed.");
     }
+    noLoop();
   }
 
   const outOfFrame =

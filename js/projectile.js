@@ -35,4 +35,14 @@ export class Projectile {
       pop();
     }
   }
+
+  at(x) {
+    const p1 = this.prevPoints.at(-1);
+    const p2 = this.pos;
+    const t = (x - p1.x) / (p2.x - p1.x);
+    if (t < 0 || t > 1) throw Error("Segment does not intersect with x");
+    const y = p1.y + t * (p2.y - p1.y);
+    const z = p1.z + t * (p2.z - p1.z);
+    return createVector(x, y, z);
+  }
 }
