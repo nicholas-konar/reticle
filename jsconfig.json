@@ -4,6 +4,7 @@
     "module": "es6",
     "allowJs": true,
     "checkJs": true,
+    "noImplicitAny": false,
     "moduleResolution": "node",
     "types": ["p5/global"]
   },
