@@ -1,3 +1,5 @@
+import p5 from "p5";
+
 export class Target {
   constructor(pos, dim) {
     this.pos = pos;

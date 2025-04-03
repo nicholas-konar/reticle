@@ -1,4 +1,4 @@
-/// <reference types="p5" />
+import p5 from "p5";
 import { Projectile } from "./projectile.js";
 import { Target } from "./target.js";
 
@@ -57,20 +57,16 @@ window.draw = () => {
   }
 };
 
-/** @param {import('p5').Vector} pos - 3D vector */
 function setupCamera(pos) {
   cam = createCamera();
   cam.setPosition(pos.x, -pos.y, pos.z);
   setCamera(cam);
 }
 
-/** @param {import('p5').Vector} pos - 3D vector
- * @param {import('p5').Vector} dim - 3D vector */
 function setupTarget(pos, dim) {
   target = new Target(pos, dim);
 }
 
-/** @param {import('p5').Vector} pos - 3D vector */
 function setupProjectile(pos) {
   const angle = radians(0);
   const windage = radians(0);
