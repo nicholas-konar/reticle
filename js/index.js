@@ -2,19 +2,19 @@ import { Projectile } from "/js/projectile.js";
 import { Target } from "/js/target.js";
 
 let projectile, target, cam, ground;
+const distBehindTarget = 100;
 
 window.setup = () => {
   createCanvas(1000, 800, WEBGL);
-  debugMode();
   const shooterPosition = createVector(0, 0, 0);
-  const cameraPosition = createVector(150, 50, 250);
-  const targetPosition = createVector(250, 0, 0);
+  const cameraPosition = createVector(-100, 50, 50);
+  const targetPosition = createVector(1000, 100, 0);
 
   setupCamera(cameraPosition);
   setupTarget(targetPosition);
   setupProjectile(shooterPosition);
-  setupGroundPlane(shooterPosition, target);
 
+  ground = min(shooterPosition.y, target.borders.bottomY) - 5;
   cam.lookAt(target.pos.x, -target.pos.y, target.pos.z);
 };
 
@@ -24,6 +24,7 @@ window.draw = () => {
   target.display();
   projectile.update();
   projectile.display();
+  setupGroundPlane();
 
   if (projectile.pos.x >= target.pos.x) {
     const px = projectile.at(target.pos.x);
@@ -37,7 +38,6 @@ window.draw = () => {
     projectile.displayTrail();
   }
 
-  const distBehindTarget = 100;
   const outOfFrame =
     projectile.pos.x < 0 ||
     projectile.pos.x > target.pos.x + distBehindTarget ||
@@ -60,9 +60,9 @@ function setupTarget(pos) {
 }
 
 function setupProjectile(pos) {
-  const angle = radians(5);
-  const windage = radians(-2);
-  const speed = 100;
+  const angle = radians(6);
+  const windage = radians(0);
+  const speed = 1000;
   const initialVelocity = createVector(
     speed * cos(angle),
     speed * sin(angle),
@@ -71,10 +71,13 @@ function setupProjectile(pos) {
   projectile = new Projectile(pos, initialVelocity, 5);
 }
 
-function setupGroundPlane(shooter, target) {
-  ground = min(shooter.y, target.borders.bottomY) - 5;
+function setupGroundPlane() {
+  const x = target.pos.x + distBehindTarget;
   push();
-  plane();
+  translate(target.pos.x / 2, -ground, 0);
+  rotateX(PI / 2);
+  fill("grey");
+  plane(x, 500);
   pop();
 }
 
