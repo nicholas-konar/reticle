@@ -79,6 +79,7 @@ function setupGroundPlane(shooter, target) {
 }
 
 function generateReport(impact, delta) {
+  // e.g. "Impact. 12.173758895194497 units low and 8.75820177756227 units left from center mass."
   let report = [impact ? "Impact." : "Missed."];
 
   if (delta.y > target.pos.y) {
