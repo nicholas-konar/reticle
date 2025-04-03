@@ -5,7 +5,7 @@ export class Projectile {
     this.pos = pos;
     this.vel = velocity.copy();
     this.size = size;
-    this.trail = [];
+    this.trail = [pos.copy()];
   }
 
   update() {
