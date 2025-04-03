@@ -13,9 +13,9 @@ window.setup = () => {
   setupCamera(cameraPosition);
   setupTarget(targetPosition);
   setupProjectile(shooterPosition);
+  setupGroundPlane(shooterPosition, target);
 
   cam.lookAt(target.pos.x, -target.pos.y, target.pos.z);
-  ground = min(shooterPosition.y, target.borders.bottomY);
 };
 
 window.draw = () => {
@@ -28,7 +28,6 @@ window.draw = () => {
   if (projectile.pos.x >= target.pos.x) {
     const px = projectile.at(target.pos.x);
     const { impact, delta } = target.impactedBy(px);
-    console.log({ impact, delta });
 
     if (impact) target.displayImpact(px), noLoop();
 
@@ -70,6 +69,13 @@ function setupProjectile(pos) {
     speed * sin(windage),
   );
   projectile = new Projectile(pos, initialVelocity, 5);
+}
+
+function setupGroundPlane(shooter, target) {
+  ground = min(shooter.y, target.borders.bottomY) - 5;
+  push();
+  plane();
+  pop();
 }
 
 function generateReport(impact, delta) {
