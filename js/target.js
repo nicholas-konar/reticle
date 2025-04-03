@@ -1,12 +1,12 @@
 export class Target {
-  constructor(pos, w, h, l) {
+  constructor(pos, dim) {
     this.pos = pos;
-    this.dim = { w, h, l };
+    this.dim = { w: dim.x, h: dim.y, l: dim.z };
     this.borders = {
-      topY: pos.y + h / 2,
-      bottomY: pos.y - h / 2,
-      leftZ: -(w / 2),
-      rightZ: w / 2,
+      topY: pos.y + dim.y / 2,
+      bottomY: pos.y - dim.y / 2,
+      leftZ: -(dim.x / 2),
+      rightZ: dim.x / 2,
     };
   }
 
