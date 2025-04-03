@@ -1,0 +1,11 @@
+{
+  "name": "reticle",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:nicholas-konar/reticle.git",
+  "author": "Nicholas Konar <nkonar@protonmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/p5": "^1.7.6"
+  }
+}

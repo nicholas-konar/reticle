@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "allowJs": true,
+    "checkJs": true,
+    "moduleResolution": "node",
+    "types": ["p5/global"]
+  },
+  "include": ["./**/*.js"]
+}
