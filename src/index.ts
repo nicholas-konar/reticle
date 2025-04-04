@@ -1,9 +1,16 @@
-import p5 from "p5";
+/// <reference types="p5/global" />
 import { Projectile } from "./projectile.js";
 import { Target } from "./target.js";
 
 let projectile, target, cam, ground;
 const distBehindTarget = 1000;
+
+declare global {
+  interface Window {
+    setup: () => void;
+    draw: () => void;
+  }
+}
 
 window.setup = () => {
   createCanvas(1000, 800, WEBGL);
