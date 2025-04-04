@@ -8,5 +8,5 @@
     "moduleResolution": "node",
     "types": ["p5/global"]
   },
-  "include": ["./**/*.js"]
+  "include": ["./**/*.ts"]
 }

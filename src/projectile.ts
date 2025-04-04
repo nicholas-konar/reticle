@@ -1,5 +1,5 @@
 import p5 from "p5";
-import constants from "./constants.js";
+import constants from "./constants";
 
 export class Projectile {
   constructor(pos, velocity, size) {

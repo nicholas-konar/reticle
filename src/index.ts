@@ -1,6 +1,6 @@
 /// <reference types="p5/global" />
-import { Projectile } from "./projectile.js";
-import { Target } from "./target.js";
+import { Projectile } from "./projectile";
+import { Target } from "./target";
 
 let projectile, target, cam, ground;
 const distBehindTarget = 1000;
