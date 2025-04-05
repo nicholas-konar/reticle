@@ -5,6 +5,7 @@
     "allowJs": true,
     "checkJs": true,
     "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "types": ["p5/global"]
   },
